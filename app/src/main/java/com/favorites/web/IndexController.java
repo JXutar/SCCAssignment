@@ -313,4 +313,8 @@ public class IndexController extends BaseController{
 		public String about() {
   		  return "about";
 	}
+	@RequestMapping("/category")
+	public String categoryPage() {
+		return "category";
+	}
 }
