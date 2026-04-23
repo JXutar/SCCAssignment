@@ -20,11 +20,8 @@ jobs:
         java-version: '8'
         distribution: 'temurin'
 
-    - name: Build with Maven
-      run: mvn clean compile -f app/pom.xml -DskipTests
-
-    - name: Package Application
-      run: mvn package -f app/pom.xml -DskipTests -Dmaven.test.skip=true
+    - name: Build and Package
+      run: mvn -f app/pom.xml -B package --no-transfer-progress -Dmaven.test.skip=true -DskipTests=true
 
     - name: Upload JAR artifact
       uses: actions/upload-artifact@v4
