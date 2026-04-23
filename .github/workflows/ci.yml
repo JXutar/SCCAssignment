@@ -20,14 +20,13 @@ jobs:
         java-version: '8'
         distribution: 'temurin'
 
-    - name: Build and Package
-      continue-on-error: true
-      run: |
-        cd app
-        mvn clean package
+    - name: Build with Maven
+      run: mvn clean compile -f app/pom.xml
+
+    - name: Package Application
+      run: mvn package -f app/pom.xml -DskipTests
 
     - name: Upload JAR artifact
-      continue-on-error: true
       uses: actions/upload-artifact@v4
       with:
         name: favorites-web-jar
