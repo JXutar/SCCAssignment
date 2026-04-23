@@ -1,5 +1,6 @@
 package com.favorites.web;
 
+import com.favorites.utils.UrlValidation;
 import com.favorites.cache.CacheService;
 import com.favorites.comm.Const;
 import com.favorites.comm.aop.LoggerManage;
@@ -77,10 +78,19 @@ public class CollectController extends BaseController{
 	@LoggerManage(description="文章收集")
 	public Response collect(Collect collect) {		
 		try {
-			String url = collect.getUrl();
-			if (StringUtils.isBlank(url) || !URLValidation.isValidUrl(url)) {
-				return result(ExceptionMsg.FAILED);
-			}
+			if (collect.getUrl() == null || !UrlValidation.isValidFormat(collect.getUrl())) {
+            	return result(ExceptionMsg.UrlInvalid);  // 需要在 ExceptionMsg 中添加这个常量
+        	}
+        
+        // 可选：验证 URL 是否可访问（如果网络允许）
+       		if (!UrlValidation.isReachable(collect.getUrl(), 5000)) {
+            	return result(ExceptionMsg.UrlUnreachable);
+        	}
+        
+        // 可选：规范化 URL
+        	if (collect.getUrl() != null) {
+            	collect.setUrl(UrlValidation.normalizeUrl(collect.getUrl()));
+        	}
 			if(StringUtils.isBlank(collect.getLogoUrl()) || collect.getLogoUrl().length()>300){
 				collect.setLogoUrl(Const.BASE_PATH + Const.default_logo);
 			}
@@ -109,6 +119,14 @@ public class CollectController extends BaseController{
 	@LoggerManage(description="获取收藏页面的LogoUrl")
 	public String getCollectLogoUrl(String url){
 		if(StringUtils.isNotBlank(url)){
+			if(!UrlValidation.isValidFormat(url)){
+            	logger.warn("无效的URL格式: {}", url);
+         		return Const.default_logo;
+        	}
+        
+        // 2. 规范化 URL（可选，建议加上）
+        	String normalizedUrl = UrlValidation.normalizeUrl(url);
+
 			String logoUrl = cacheService.getMap(url);
 			if(StringUtils.isNotBlank(logoUrl)){
 				return logoUrl;
