@@ -21,7 +21,9 @@ jobs:
         distribution: 'temurin'
 
     - name: Build and Package
-      run: mvn -f app/pom.xml -B package --no-transfer-progress -Dmaven.test.skip=true
+      run: |
+        cd app
+        mvn clean package -Dmaven.test.skip=true -DskipTests=true -Dmaven.test.failure.ignore=true
 
     - name: Upload JAR artifact
       uses: actions/upload-artifact@v4
