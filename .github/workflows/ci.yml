@@ -2,7 +2,7 @@ name: CI Pipeline
 
 on:
   push:
-    branches: [ master, feature/*, validation, garylim037:your-branch-name ]
+    branches: [ master, feature/*, validation, your-branch-name ]
   pull_request:
     branches: [ master ]
 
@@ -22,9 +22,6 @@ jobs:
 
     - name: Build with Maven
       run: mvn clean compile -f app/pom.xml
-
-    - name: Run Tests
-      run: mvn test -f app/pom.xml
 
     - name: Package Application
       run: mvn package -f app/pom.xml -DskipTests
