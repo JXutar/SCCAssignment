@@ -23,7 +23,18 @@ jobs:
     - name: Build and Package
       run: |
         cd app
-        mvn clean package -Dmaven.test.skip=true -DskipTests=true -Dmaven.test.failure.ignore=true
+        mvn clean package \
+          -Dmaven.test.skip=true \
+          -DskipTests=true \
+          -Dmaven.test.failure.ignore=true \
+          -Dspring.boot.test.autoconfigure.filter.typeExcludeFilters=true \
+          -Dspring.devtools.add-properties=false \
+          -Dspring.devtools.restart.enabled=false
+      env:
+        SPRING_PROFILES_ACTIVE: docker
+        SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/favorites
+        SPRING_DATASOURCE_USERNAME: root
+        SPRING_DATASOURCE_PASSWORD: root
 
     - name: Upload JAR artifact
       uses: actions/upload-artifact@v4
