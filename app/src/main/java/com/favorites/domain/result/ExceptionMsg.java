@@ -20,6 +20,8 @@ public enum ExceptionMsg {
     FavoritesNameUsed("000201","收藏夹名称已被创建"),
     
     CollectExist("000300","该文章已被收藏"),
+    UrlInvalid("000301","URL格式不正确"),
+    UrlUnreachable("000302","URL无法访问"),
     
     FileEmpty("000400","上传文件为空"),
     LimitPictureSize("000401","图片大小必须小于2M"),
